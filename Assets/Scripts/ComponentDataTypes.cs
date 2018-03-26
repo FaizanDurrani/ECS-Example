@@ -5,17 +5,24 @@ using Unity.Mathematics;
 
 namespace ECSExample
 {
-    [Serializable]
     public struct Unit : IComponentData
     {
-        public float Speed;
-        public float3 NextPosition;
+        public int UnitId;
+    }
+    
+    public struct Selectable : IComponentData
+    {
+        public bool1 Selected;
     }
 
-    [Serializable]
     public struct UnitSpawnData : IComponentData
     {
         public int SpawnCount;
     }
 
+    public struct Controllable : IComponentData
+    {
+        public float Speed;
+        public float3 NextPosition;
+    }
 }

@@ -11,23 +11,24 @@ namespace ECSExample
     {
         public static EntityArchetype UnitArchetype;
         public static MeshInstanceRenderer UnitMesh;
-        public static GameSettings Settings;
         
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void InitBeforeScene()
-        {
-            var entitityManager = World.Active.GetOrCreateManager<EntityManager>();
-            UnitArchetype = entitityManager.CreateArchetype(typeof(Unit), typeof(Position), typeof(TransformMatrix));
-        }
+        public static GameSettings GameSettings;
+        public static UiReferences UiReferences;
+        public static PrefabManager PrefabManager;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void InitAfterScene()
         {
-            Settings = Object.FindObjectOfType<GameSettings>();
-            if (Settings == null)
-                return;
+            GameSettings = Object.FindObjectOfType<GameSettings>();
+            PrefabManager = Object.FindObjectOfType<PrefabManager>();
+            UiReferences = Object.FindObjectOfType<UiReferences>();
 
-            UnitMesh = GetMeshFromPrototype("UnitMeshProto");
+            if (!GameSettings || !UiReferences || !PrefabManager)
+            {
+                Debug.LogError("Couldn't find either GameSettings, UiRefences or PrefabManager in the scene");
+                return;
+            }
+
             UnitSpawnSystem.Initialize(World.Active.GetOrCreateManager<EntityManager>());
         }
 
